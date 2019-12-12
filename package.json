@@ -1,0 +1,32 @@
+{
+  "name": "human-inventory-management-system",
+  "version": "1.0.0",
+  "description": "Human resources management system",
+  "main": "launch.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jondam1985/human-inventory-management-system.git"
+  },
+  "keywords": [
+    "mysql",
+    "system",
+    "human",
+    "resource",
+    "management",
+    "cli"
+  ],
+  "author": "Damian Ruiz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jondam1985/human-inventory-management-system/issues"
+  },
+  "homepage": "https://github.com/jondam1985/human-inventory-management-system#readme",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^7.0.0",
+    "mysql": "^2.17.1"
+  }
+}
