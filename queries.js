@@ -18,13 +18,6 @@ connection.connect(function(err, res) {
 
 module.exports = {
 
-    connectionString: {
-        user: "root",
-        host: "localhost",
-        port: 3306,
-        password: "",
-        database: "hr_management"
-    },
 
     connect: connection,
 
