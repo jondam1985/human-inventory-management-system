@@ -2,6 +2,20 @@ const mysql = require("mysql");
 const table = require("console.table");
 const inquirer = require("inquirer");
 
+var connection = mysql.createConnection({
+        user: "root",
+        host: "localhost",
+        port: 3306,
+        password: "",
+        database: "hr_management"
+    },
+)
+
+connection.connect(function(err, res) {
+    if (err) throw err;
+    console.log(`Connected to thread ID: ${connection.threadId}`);
+})
+
 module.exports = {
 
     connectionString: {
@@ -12,17 +26,24 @@ module.exports = {
         database: "hr_management"
     },
 
+    connect: connection,
+
     viewAll: function viewAll(table) {
-        var connection = mysql.createConnection(this.connectionString);
+        return new Promise((resolve, reject) => {
+        //var connection = mysql.createConnection(this.connectionString);
         connection.query(`SELECT * from ${table}`, function (err, result) {
             if (err) throw err.stack;
+            if (resolve) {
             console.table(result);
-            connection.end();
-        });
+        }
+            //connection.end();
+        })
+    })
     },
 
     managers: function managers() {
-        var connection = mysql.createConnection(this.connectionString);
+        return new Promise ((reject, resolve) => {
+        //var connection = mysql.createConnection(this.connectionString);
         connection.query("select distinct manager_id from employee where manager_id is not null", function (error, result) {
             if (error) { error.stack };
             let managersArr = [];
@@ -37,24 +58,32 @@ module.exports = {
             }]).then(answer => {
                 connection.query(`SELECT * FROM employee where manager_id = ${answer.manager}`, function (err, result) {
                     if (err) throw err;
+                    if (resolve) {
                     console.table(result);
+                }
                 })
-                connection.end();
+                //connection.end();
             })
         })
+    })
 
     },
 
-    budget: function (budget) {
-        var connection = mysql.createConnection(this.connectionString);
+    budget: function budget() {
+        return new Promise (function(reject, resolve) {
+        //var connection = mysql.createConnection(this.connectionString);
         connection.query(`select sum(salary) as utilized_budget from role inner join employee on role.id = employee.role_id`, function (err, result) {
             if (err) throw err;
+            if (resolve) {
             console.table(result);
+        }
         })
-        connection.end();
+        //connection.end();
+    })
     },
 
     addEmployee: function addEmployee() {
+        return new Promise ((resolve, reject) => {
         inquirer.prompt([
             {
                 type: "input",
@@ -87,15 +116,19 @@ module.exports = {
                 default: 001
             }
         ]).then(answer => {
-            var connection = mysql.createConnection(this.connectionString);
+            //var connection = mysql.createConnection(this.connectionString);
             connection.query(`INSERT INTO employee (id, first_name, last_name, role_id, manager_id) values (${answer.id}, '${answer.fName}', '${answer.lName}', ${answer.role}, ${answer.manager})`, function (err, result) {
                 if (err) throw err;
+                if (resolve) {
                 console.table(result);
+            }
             })
-            connection.end();
+            //connection.end();
         })
+    })
     },
     addDepartment: function addDepartment() {
+        return new Promise((reject, resolve) => {
         inquirer.prompt([
             {
                 type: "input",
@@ -110,16 +143,20 @@ module.exports = {
                 default: "Placeholder"
             }
         ]).then(answer => {
-            var connection = mysql.createConnection(this.connectionString);
+            //var connection = mysql.createConnection(this.connectionString);
             connection.query(`INSERT INTO department (id, name) values (${answer.id}, '${answer.name}')`, function (err, result) {
                 if (err) throw err;
+                if (resolve) {
                 console.table(result);
+            }
             })
-            connection.end();
+            //connection.end();
         })
+    })
     },
 
     addRole: function addRole() {
+        return new Promise((reject, resolve) => {
         inquirer.prompt([
             {
                 type: "input",
@@ -146,17 +183,21 @@ module.exports = {
                 default: 001
             }
         ]).then(answer => {
-            var connection = mysql.createConnection(this.connectionString);
+            //var connection = mysql.createConnection(this.connectionString);
             connection.query(`INSERT INTO role (id, title, salary, department_id) values (${answer.id}, '${answer.title}', ${answer.salary}, ${answer.department})`, function (err, result) {
                 if (err) throw err;
+                if (resolve) {
                 console.table(result);
+            }
             })
-            connection.end();
+            //connection.end();
         })
+    })
     },
 
     updateEmployee: function updateEmployee() {
-        var connection = mysql.createConnection(this.connectionString);
+        return new Promise ((reject, resolve) => {
+        //var connection = mysql.createConnection(this.connectionString);
         connection.query(`SELECT * from employee`, function (err, result) {
             if (err) throw err;
             let employeeArr = [];
@@ -178,12 +219,18 @@ module.exports = {
                             message: "enter new role",
                             default: "1"
                         }]).then(answer => {
-                            connection.query(`update employee set role_id = ${answer.newRole} where id = ${employeeId}`);
+                            connection.query(`update employee set role_id = ${answer.newRole} where id = ${employeeId}`, function(err, result) {
+                                if (err) throw err;
+                                if (resolve) {
+                                    console.table(result);
+                                }
+                            });
                         })
                         //connection.end();
                     }
                 }
             })
+        })
         })
     }
 }
