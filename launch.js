@@ -2,14 +2,15 @@ const inquirer = require("inquirer");
 const queries = require("./queries");
 const choices = require("./choices");
 
-function initialQuestion() {
 
-    console.log(`%c 
-    :::  :::    :::::::       :::    :::  :::    :::
-    :::  :::    ::: :::       ::::  ::::  :::::  :::
-    ::::::::    ::::::        ::: :: :::  ::: :: :::
-    :::  :::    :::  :::      :::    :::  :::  :::::
-    :::  ::: :: :::  ::: ::   :::    :::  :::    ::: `)
+console.log(`
+:::  :::    :::::::      :::    :::    ::::::::
+:::  :::      :::        ::::  ::::    :::
+::::::::      :::        ::: :: :::    ::::::::
+:::  :::      :::        :::    :::         :::
+:::  ::: :: :::::::  ::  :::    ::: :: :::::::: `)
+
+function initialQuestion() {
 
     inquirer
         .prompt([{
@@ -22,7 +23,9 @@ function initialQuestion() {
             switch (answer.action) {
                 case "Quit":
                     console.log("Good bye!");
+                    queries.connect.end();
                     return false;
+                    break;
                 case "View records":
                     inquirer
                         .prompt([{
@@ -34,19 +37,19 @@ function initialQuestion() {
                             //console.log(answer.view);
                             switch (answer.view) {
                                 case "View all employees":
-                                    queries.viewAll("employee");
+                                    queries.viewAll("employee").then(initialQuestion());
                                     break;
                                 case "View all roles":
-                                    queries.viewAll("role");
+                                    queries.viewAll("role").then(initialQuestion());
                                     break;
                                 case "View all departments":
-                                    queries.viewAll("department");
+                                    queries.viewAll("department").then(initialQuestion());
                                     break;
                                 case "View employees by manager":
-                                    queries.managers();
+                                    queries.managers().then(initialQuestion());
                                     break;
                                 case "View total utilized budget":
-                                    queries.budget();
+                                    queries.budget().then(initialQuestion());
                                     break;
                             }
                         })
@@ -64,19 +67,21 @@ function initialQuestion() {
                                     queries.addEmployee();
                                     break;
                                 case "Add department":
-                                    queries.addDepartment();
+                                    queries.addDepartment().then(initialQuestion());
                                     break;
                                 case "Add role":
-                                    queries.addRole();
+                                    queries.addRole().then(initialQuestion());
                                     break;
                             }
                         })
                     break;
                 case "Update records":
-                    queries.updateEmployee();
+                    queries.updateEmployee().then(initialQuestion());
                     break;
             }
         })
 };
 
 initialQuestion();
+
+module.exports = initialQuestion();
