@@ -10,6 +10,8 @@ console.log(`
 :::  :::      :::        :::    :::         :::
 :::  ::: :: :::::::  ::  :::    ::: :: :::::::: `)
 
+initialQuestion();
+
 function initialQuestion() {
 
     inquirer
@@ -37,19 +39,19 @@ function initialQuestion() {
                             //console.log(answer.view);
                             switch (answer.view) {
                                 case "View all employees":
-                                    queries.viewAll("employee").then(initialQuestion());
+                                    queries.viewAll("employee")//.then(initialQuestion());
                                     break;
                                 case "View all roles":
-                                    queries.viewAll("role").then(initialQuestion());
+                                    queries.viewAll("role")//.then(initialQuestion());
                                     break;
                                 case "View all departments":
-                                    queries.viewAll("department").then(initialQuestion());
+                                    queries.viewAll("department")//.then(initialQuestion());
                                     break;
                                 case "View employees by manager":
-                                    queries.managers().then(initialQuestion());
+                                    queries.managers()//.then(initialQuestion());
                                     break;
                                 case "View total utilized budget":
-                                    queries.budget().then(initialQuestion());
+                                    queries.budget()//.then(initialQuestion());
                                     break;
                             }
                         })
@@ -67,21 +69,18 @@ function initialQuestion() {
                                     queries.addEmployee();
                                     break;
                                 case "Add department":
-                                    queries.addDepartment().then(initialQuestion());
+                                    queries.addDepartment()//.then(initialQuestion());
                                     break;
                                 case "Add role":
-                                    queries.addRole().then(initialQuestion());
+                                    queries.addRole()//.then(initialQuestion());
                                     break;
                             }
                         })
                     break;
                 case "Update records":
-                    queries.updateEmployee().then(initialQuestion());
+                    queries.updateEmployee()//.then(initialQuestion());
                     break;
             }
         })
 };
 
-initialQuestion();
-
-module.exports = initialQuestion();
